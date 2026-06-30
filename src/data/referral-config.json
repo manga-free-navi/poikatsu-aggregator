@@ -1,0 +1,27 @@
+{
+  "PayPay": {
+    "referralUrl": "https://paypay.ne.jp/referral?code=YOUR_PAYPAY_CODE",
+    "referralCode": "YOUR_PAYPAY_CODE",
+    "note": "※アプリ登録時に紹介コードを入力するとポイント進呈"
+  },
+  "dポイント": {
+    "referralUrl": "https://dpoint.docomo.ne.jp/cp/referral_sample_id",
+    "referralCode": "",
+    "note": "※紹介リンクからエントリーしての利用開始でポイント進呈"
+  },
+  "Vポイント": {
+    "referralUrl": "https://www.smbc-card.com/nyukai/affiliate/index.jsp?YOUR_SMBC_ID",
+    "referralCode": "",
+    "note": "※専用の紹介URLからのカード発行で紹介特典が適用されます"
+  },
+  "楽天ポイント": {
+    "referralUrl": "https://r10.to/your_rakuten_id",
+    "referralCode": "",
+    "note": "※紹介リンクから楽天ペイ等の利用登録で楽天ポイント進呈"
+  },
+  "メルカリ": {
+    "referralUrl": "https://mercari.com/signup/?code=YOUR_MERCARI_CODE",
+    "referralCode": "YOUR_MERCARI_CODE",
+    "note": "※新規登録時に紹介コードを入力すると500pt付与されます"
+  }
+}

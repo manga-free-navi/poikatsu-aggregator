@@ -449,3 +449,66 @@ body {
   font-size: 0.8rem;
   background-color: rgba(9, 13, 22, 0.95);
 }
+
+/* 紹介コード表示・コピー枠 */
+.referral-code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(251, 191, 36, 0.25);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  margin-top: auto;
+  margin-bottom: 0.5rem;
+}
+
+[data-theme="light"] .referral-code-box {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-color: rgba(217, 119, 6, 0.25);
+}
+
+.referral-code-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+.referral-code-value {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  font-family: monospace;
+}
+
+.referral-copy-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 4px;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.referral-copy-btn:hover {
+  background-color: var(--bg-primary);
+  border-color: var(--text-secondary);
+}
+
+.referral-copy-btn.copied {
+  background: var(--accent-green-gradient);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+/* 紹介注記 */
+.referral-note {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  text-align: left;
+}

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import poikatsuDataRaw from '../data/poikatsu.json';
+import referralConfigRaw from '../data/referral-config.json';
 
 interface Campaign {
   id: string;
@@ -15,6 +16,12 @@ interface Campaign {
   endDate: string | null;
   description: string;
   updatedAt: string;
+}
+
+interface ReferralSetting {
+  referralUrl: string;
+  referralCode: string;
+  note: string;
 }
 
 const BRAND_FILTERS = [
@@ -40,12 +47,14 @@ const CATEGORY_FILTERS = [
 
 export default function Home() {
   const campaigns: Campaign[] = poikatsuDataRaw as Campaign[];
+  const referralConfig: Record<string, ReferralSetting> = referralConfigRaw as Record<string, ReferralSetting>;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedBrand, setSelectedBrand] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('endDateAsc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const itemsPerPage = 60;
 
   // フィルター変更時にページを 1 に自動リセット
@@ -125,6 +134,18 @@ export default function Home() {
       case 'bank_security': return '銀行・証券';
       case 'lifestyle': return '生活・サービス';
       default: return 'その他';
+    }
+  };
+
+  // 紹介コードのコピーハンドラ
+  const handleCopyCode = (id: string, code: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(code).then(() => {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+      }).catch(err => {
+        console.error('コピーに失敗しました:', err);
+      });
     }
   };
 
@@ -210,65 +231,95 @@ export default function Home() {
           </div>
         ) : (
           <div className="poikatsu-grid">
-            {paginatedCampaigns.map(camp => (
-              <article key={camp.id} className="poikatsu-card">
-                <div className="card-image-wrapper">
-                  {camp.imageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={camp.imageUrl}
-                      alt={camp.title}
-                      className="card-image"
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
-                      画像なし
-                    </div>
-                  )}
-                  {/* ブランドバッジ */}
-                  <span className={`card-badge ${getBrandBadgeClass(camp.pointBrand)}`}>
-                    {camp.pointBrand}
-                  </span>
-                  {/* 還元率バッジ */}
-                  {camp.rewardText && camp.rewardText !== '要詳細確認' && (
-                    <span className="reward-badge">
-                      {camp.rewardText}
-                    </span>
-                  )}
-                </div>
+            {paginatedCampaigns.map(camp => {
+              // 各キャンペーンに対応する紹介URL・紹介コード設定を取得
+              const refSetting = referralConfig[camp.pointBrand] || 
+                                 (camp.title.includes('メルカリ') ? referralConfig['メルカリ'] : null);
+              const targetUrl = refSetting && refSetting.referralUrl ? refSetting.referralUrl : camp.url;
+              const hasReferralCode = refSetting && refSetting.referralCode;
 
-                <div className="card-content">
-                  <div className="card-meta">
-                    <span>{camp.company}</span>
-                    <span>📂 {getCategoryLabel(camp.category)}</span>
-                  </div>
-                  <h3 className="card-title" title={camp.title}>{camp.title}</h3>
-                  <p className="card-desc">{camp.description}</p>
-                  
-                  <div className="card-footer">
-                    {camp.endDate ? (
-                      <span className="end-date-text">
-                        ⏳ {camp.endDate.replace(/-/g, '/')} まで
-                      </span>
+              return (
+                <article key={camp.id} className="poikatsu-card">
+                  <div className="card-image-wrapper">
+                    {camp.imageUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={camp.imageUrl}
+                        alt={camp.title}
+                        className="card-image"
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                      />
                     ) : (
-                      <span className="end-date-text" style={{ color: 'var(--text-muted)', backgroundColor: 'rgba(255,255,255,0.05)' }}>
-                        ⏳ 終了日未定
+                      <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                        画像なし
+                      </div>
+                    )}
+                    {/* ブランドバッジ */}
+                    <span className={`card-badge ${getBrandBadgeClass(camp.pointBrand)}`}>
+                      {camp.pointBrand}
+                    </span>
+                    {/* 還元率バッジ */}
+                    {camp.rewardText && camp.rewardText !== '要詳細確認' && (
+                      <span className="reward-badge">
+                        {camp.rewardText}
                       </span>
                     )}
-                    <a
-                      href={camp.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="action-btn"
-                    >
-                      詳細を見る
-                    </a>
                   </div>
-                </div>
-              </article>
-            ))}
+
+                  <div className="card-content">
+                    <div className="card-meta">
+                      <span>{camp.company}</span>
+                      <span>📂 {getCategoryLabel(camp.category)}</span>
+                    </div>
+                    <h3 className="card-title" title={camp.title}>{camp.title}</h3>
+                    <p className="card-desc">{camp.description}</p>
+                    
+                    {/* 紹介コード表示・コピー用UI */}
+                    {hasReferralCode && (
+                      <div className="referral-code-box">
+                        <span className="referral-code-label">紹介コード</span>
+                        <span className="referral-code-value">{refSetting.referralCode}</span>
+                        <button
+                          className={`referral-copy-btn ${copiedId === camp.id ? 'copied' : ''}`}
+                          onClick={() => handleCopyCode(camp.id, refSetting.referralCode)}
+                        >
+                          {copiedId === camp.id ? '✓ コピー完了' : '📋 コピー'}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* 紹介特典の注記 */}
+                    {refSetting?.note && (
+                      <div className="referral-note">
+                        {refSetting.note}
+                      </div>
+                    )}
+                    
+                    <div className="card-footer" style={{ marginTop: '1rem' }}>
+                      {camp.endDate ? (
+                        <span className="end-date-text">
+                          ⏳ {camp.endDate.replace(/-/g, '/')} まで
+                        </span>
+                      ) : (
+                        <span className="end-date-text" style={{ color: 'var(--text-muted)', backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                          ⏳ 終了日未定
+                        </span>
+                      )}
+                      <a
+                        href={targetUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="action-btn"
+                        style={refSetting && refSetting.referralUrl ? { background: 'var(--accent-green-gradient)' } : {}}
+                      >
+                        {refSetting && refSetting.referralUrl ? '🎁 紹介で登録' : '詳細を見る'}
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
 

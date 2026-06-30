@@ -51,21 +51,21 @@ export default function RootLayout({
             {/* サイト切り替えタブ (姉妹サイト相互リンク) */}
             <div className="header-tabs">
               <a 
-                href={process.env.NEXT_PUBLIC_ANIME_SITE_URL || "../youtube-free-anime-aggregator/out/index.html"} 
+                href={process.env.NEXT_PUBLIC_ANIME_SITE_URL || "https://manga-free-navi.github.io/youtube-free-anime-aggregator/"} 
                 className="header-tab"
                 id="tab-to-anime"
               >
                 <span>📺 無料アニメ</span>
               </a>
               <a 
-                href={process.env.NEXT_PUBLIC_MANGA_SITE_URL || "../manga-sale-aggregator/out/index.html"} 
+                href={process.env.NEXT_PUBLIC_MANGA_SITE_URL || "https://manga-free-navi.github.io/manga-sale-aggregator/"} 
                 className="header-tab"
                 id="tab-to-manga"
               >
                 <span>📚 漫画セール</span>
               </a>
               <a 
-                href={process.env.NEXT_PUBLIC_GAME_SITE_URL || "../game-sale-aggregator/out/index.html"} 
+                href={process.env.NEXT_PUBLIC_GAME_SITE_URL || "https://manga-free-navi.github.io/game-sale-aggregator/"} 
                 className="header-tab"
                 id="tab-to-game"
               >

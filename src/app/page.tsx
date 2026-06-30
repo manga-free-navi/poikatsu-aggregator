@@ -1,65 +1,306 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useMemo, useEffect } from 'react';
+import poikatsuDataRaw from '../data/poikatsu.json';
+
+interface Campaign {
+  id: string;
+  title: string;
+  company: string;
+  imageUrl: string;
+  pointBrand: string;
+  category: string;
+  rewardText: string;
+  url: string;
+  endDate: string | null;
+  description: string;
+  updatedAt: string;
+}
+
+const BRAND_FILTERS = [
+  { label: 'すべて', key: 'all' },
+  { label: 'PayPay', key: 'PayPay' },
+  { label: 'dポイント', key: 'dポイント' },
+  { label: 'Ponta', key: 'Ponta' },
+  { label: 'Vポイント', key: 'Vポイント' },
+  { label: '楽天ポイント', key: '楽天ポイント' },
+  { label: 'au PAY', key: 'au PAY' },
+  { label: 'その他', key: 'その他' }
+];
+
+const CATEGORY_FILTERS = [
+  { label: 'すべて', key: 'all' },
+  { label: '📱 コード決済', key: 'payment' },
+  { label: '💳 クレジットカード', key: 'card' },
+  { label: '🛍️ ショッピング', key: 'shopping' },
+  { label: '📈 銀行・証券', key: 'bank_security' },
+  { label: '🏠 生活・サービス', key: 'lifestyle' },
+  { label: '❓ その他', key: 'other' }
+];
 
 export default function Home() {
+  const campaigns: Campaign[] = poikatsuDataRaw as Campaign[];
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortBy, setSortBy] = useState('endDateAsc');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 60;
+
+  // フィルター変更時にページを 1 に自動リセット
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedBrand, selectedCategory, sortBy]);
+
+  // クライアントフィルタリング＆ソート
+  const filteredCampaigns = useMemo(() => {
+    let result = [...campaigns];
+
+    // 1. 検索キーワード
+    if (searchTerm.trim() !== '') {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(
+        c =>
+          c.title.toLowerCase().includes(term) ||
+          c.company.toLowerCase().includes(term) ||
+          c.description.toLowerCase().includes(term)
+      );
+    }
+
+    // 2. ブランド
+    if (selectedBrand !== 'all') {
+      result = result.filter(c => c.pointBrand === selectedBrand);
+    }
+
+    // 3. カテゴリ
+    if (selectedCategory !== 'all') {
+      result = result.filter(c => c.category === selectedCategory);
+    }
+
+    // 4. ソート
+    result.sort((a, b) => {
+      if (sortBy === 'endDateAsc') {
+        // 終了日が近い順 (nullは後ろ)
+        if (!a.endDate && !b.endDate) return b.updatedAt.localeCompare(a.updatedAt);
+        if (!a.endDate) return 1;
+        if (!b.endDate) return -1;
+        return a.endDate.localeCompare(b.endDate);
+      }
+      
+      if (sortBy === 'newest') {
+        // 新着順
+        return b.updatedAt.localeCompare(a.updatedAt);
+      }
+
+      return 0;
+    });
+
+    return result;
+  }, [campaigns, searchTerm, selectedBrand, selectedCategory, sortBy]);
+
+  // ページネーションデータ分割
+  const totalPages = Math.ceil(filteredCampaigns.length / itemsPerPage);
+  const paginatedCampaigns = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredCampaigns.slice(start, start + itemsPerPage);
+  }, [filteredCampaigns, currentPage]);
+
+  const getBrandBadgeClass = (brand: string) => {
+    switch (brand) {
+      case 'PayPay': return 'badge-paypay';
+      case 'dポイント': return 'badge-dpoint';
+      case 'Ponta': return 'badge-ponta';
+      case 'Vポイント': return 'badge-vpoint';
+      case '楽天ポイント': return 'badge-rakuten';
+      default: return 'badge-other';
+    }
+  };
+
+  const getCategoryLabel = (cat: string) => {
+    switch (cat) {
+      case 'payment': return 'コード決済';
+      case 'card': return 'クレジットカード';
+      case 'shopping': return 'ショッピング';
+      case 'bank_security': return '銀行・証券';
+      case 'lifestyle': return '生活・サービス';
+      default: return 'その他';
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main style={{ minHeight: '80vh', paddingBottom: '3rem' }}>
+      {/* ヒーロー */}
+      <section className="hero">
+        <div className="container">
+          <h1 className="hero-title">
+            実質タダ ＆ 大量還元！<span>ポイ活ナビ</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="hero-desc">
+            主要ポイントサービスやクレジットカードの最新還元キャンペーン、お得なポイ活情報をリアルタイムで自動集約。
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      <div className="container">
+        {/* フィルターセクション */}
+        <section className="filter-section">
+          <input
+            type="text"
+            className="search-box"
+            placeholder="キャンペーン名、ブランド、企業名で検索..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+
+          <div className="filter-group">
+            {/* ブランドフィルター */}
+            <div className="filter-row">
+              <span className="filter-label">ポイント</span>
+              {BRAND_FILTERS.map(brand => (
+                <button
+                  key={brand.key}
+                  className={`filter-btn ${selectedBrand === brand.key ? 'active' : ''}`}
+                  onClick={() => setSelectedBrand(brand.key)}
+                >
+                  {brand.label}
+                </button>
+              ))}
+            </div>
+
+            {/* カテゴリフィルター */}
+            <div className="filter-row">
+              <span className="filter-label">ジャンル</span>
+              {CATEGORY_FILTERS.map(cat => (
+                <button
+                  key={cat.key}
+                  className={`filter-btn ${selectedCategory === cat.key ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(cat.key)}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {/* ソート */}
+            <div className="filter-row" style={{ marginTop: '0.5rem', justifyContent: 'space-between' }}>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>
+                該当キャンペーン: <strong>{filteredCampaigns.length}</strong> 件
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span className="filter-label" style={{ minWidth: 'auto' }}>並び順</span>
+                <select
+                  className="sort-select"
+                  value={sortBy}
+                  onChange={e => setSortBy(e.target.value)}
+                >
+                  <option value="endDateAsc">⏳ 終了日が近い順</option>
+                  <option value="newest">🆕 新着順</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* キャンペーン一覧 */}
+        {paginatedCampaigns.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--text-muted)' }}>
+            <h3>キャンペーンが見つかりませんでした</h3>
+            <p style={{ marginTop: '0.5rem' }}>条件を変えて検索してください。</p>
+          </div>
+        ) : (
+          <div className="poikatsu-grid">
+            {paginatedCampaigns.map(camp => (
+              <article key={camp.id} className="poikatsu-card">
+                <div className="card-image-wrapper">
+                  {camp.imageUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={camp.imageUrl}
+                      alt={camp.title}
+                      className="card-image"
+                      loading="lazy"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)' }}>
+                      画像なし
+                    </div>
+                  )}
+                  {/* ブランドバッジ */}
+                  <span className={`card-badge ${getBrandBadgeClass(camp.pointBrand)}`}>
+                    {camp.pointBrand}
+                  </span>
+                  {/* 還元率バッジ */}
+                  {camp.rewardText && camp.rewardText !== '要詳細確認' && (
+                    <span className="reward-badge">
+                      {camp.rewardText}
+                    </span>
+                  )}
+                </div>
+
+                <div className="card-content">
+                  <div className="card-meta">
+                    <span>{camp.company}</span>
+                    <span>📂 {getCategoryLabel(camp.category)}</span>
+                  </div>
+                  <h3 className="card-title" title={camp.title}>{camp.title}</h3>
+                  <p className="card-desc">{camp.description}</p>
+                  
+                  <div className="card-footer">
+                    {camp.endDate ? (
+                      <span className="end-date-text">
+                        ⏳ {camp.endDate.replace(/-/g, '/')} まで
+                      </span>
+                    ) : (
+                      <span className="end-date-text" style={{ color: 'var(--text-muted)', backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                        ⏳ 終了日未定
+                      </span>
+                    )}
+                    <a
+                      href={camp.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="action-btn"
+                    >
+                      詳細を見る
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+
+        {/* ページネーション */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              className="page-btn"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(p => p - 1)}
+            >
+              &lt;
+            </button>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                className={`page-btn ${currentPage === i + 1 ? 'active' : ''}`}
+                onClick={() => setCurrentPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              className="page-btn"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(p => p + 1)}
+            >
+              &gt;
+            </button>
+          </div>
+        )}
+      </div>
+    </main>
   );
 }

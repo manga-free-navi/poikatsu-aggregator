@@ -163,6 +163,119 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 🏆 おすすめポイントサイト紹介セクション */}
+      <section className="recommend-points-section" style={{
+        paddingTop: '2rem',
+        paddingBottom: '2.5rem',
+        background: 'rgba(255, 255, 255, 0.02)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+        marginBottom: '2rem'
+      }}>
+        <div className="container">
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.25rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span>🏆 特典付き！おすすめポイ活サイト紹介登録</span>
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '1.25rem'
+          }}>
+            {/* モッピー */}
+            {referralConfig['モッピー'] && (
+              <div className="poikatsu-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: 0 }}>
+                <div className="card-content" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: '1.25rem' }}>
+                  <div>
+                    <h3 className="card-title" style={{ color: '#f59e0b', fontSize: '1.1rem', fontWeight: 800, margin: '0 0 0.5rem 0' }}>モッピー (moppy)</h3>
+                    <p className="card-desc" style={{ fontSize: '0.8rem', minHeight: 'auto', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>
+                      国内最大級のポイ活サイト。広告利用やアンケート、ゲームでザクザク貯まります。
+                    </p>
+                    <div className="referral-code-box" style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                      <span className="referral-code-label" style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>招待コード:</span>
+                      <span className="referral-code-value" style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.9rem', color: '#fff' }}>{referralConfig['モッピー'].referralCode}</span>
+                      <button
+                        className={`referral-copy-btn ${copiedId === 'moppy-site' ? 'copied' : ''}`}
+                        onClick={() => handleCopyCode('moppy-site', referralConfig['モッピー'].referralCode)}
+                        style={{ marginLeft: 'auto', fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '4px', border: 'none', background: copiedId === 'moppy-site' ? 'var(--accent-green)' : 'rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}
+                      >
+                        {copiedId === 'moppy-site' ? '✓ コピー完了' : '📋 コピー'}
+                      </button>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <div className="referral-note" style={{ margin: '0.5rem 0 0.75rem 0', fontSize: '0.7rem', color: 'var(--accent-green)' }}>{referralConfig['モッピー'].note}</div>
+                    <a href={referralConfig['モッピー'].referralUrl} target="_blank" rel="noopener noreferrer" className="action-btn" style={{ width: '100%', textAlign: 'center', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', display: 'block', boxSizing: 'border-box', textDecoration: 'none', padding: '0.5rem', borderRadius: '6px', color: '#fff', fontWeight: 700, fontSize: '0.85rem' }}>
+                      🎁 特典付きで登録する
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ハピタス */}
+            {referralConfig['ハピタス'] && (
+              <div className="poikatsu-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: 0 }}>
+                <div className="card-content" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: '1.25rem' }}>
+                  <div>
+                    <h3 className="card-title" style={{ color: '#3b82f6', fontSize: '1.1rem', fontWeight: 800, margin: '0 0 0.5rem 0' }}>ハピタス (Hapitas)</h3>
+                    <p className="card-desc" style={{ fontSize: '0.8rem', minHeight: 'auto', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>
+                      ショッピングや旅行予約の還元率がトップクラス。1P＝1円で分かりやすい！
+                    </p>
+                    <div className="referral-code-box" style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                      <span className="referral-code-label" style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>招待コード:</span>
+                      <span className="referral-code-value" style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.9rem', color: '#fff' }}>{referralConfig['ハピタス'].referralCode}</span>
+                      <button
+                        className={`referral-copy-btn ${copiedId === 'hapitas-site' ? 'copied' : ''}`}
+                        onClick={() => handleCopyCode('hapitas-site', referralConfig['ハピタス'].referralCode)}
+                        style={{ marginLeft: 'auto', fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '4px', border: 'none', background: copiedId === 'hapitas-site' ? 'var(--accent-green)' : 'rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}
+                      >
+                        {copiedId === 'hapitas-site' ? '✓ コピー完了' : '📋 コピー'}
+                      </button>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <div className="referral-note" style={{ margin: '0.5rem 0 0.75rem 0', fontSize: '0.7rem', color: 'var(--accent-green)' }}>{referralConfig['ハピタス'].note}</div>
+                    <a href={referralConfig['ハピタス'].referralUrl} target="_blank" rel="noopener noreferrer" className="action-btn" style={{ width: '100%', textAlign: 'center', background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', display: 'block', boxSizing: 'border-box', textDecoration: 'none', padding: '0.5rem', borderRadius: '6px', color: '#fff', fontWeight: 700, fontSize: '0.85rem' }}>
+                      🎁 特典付きで登録する
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ニフティ */}
+            {referralConfig['ニフティ'] && (
+              <div className="poikatsu-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', margin: 0 }}>
+                <div className="card-content" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', padding: '1.25rem' }}>
+                  <div>
+                    <h3 className="card-title" style={{ color: '#10b981', fontSize: '1.1rem', fontWeight: 800, margin: '0 0 0.5rem 0' }}>ニフティポイントクラブ</h3>
+                    <p className="card-desc" style={{ fontSize: '0.8rem', minHeight: 'auto', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>
+                      貯めたポイントをノジマポイントに交換すると、価値がなんと1.5倍（ノジ活）に！
+                    </p>
+                    <div className="referral-code-box" style={{ margin: '0.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.03)', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                      <span className="referral-code-label" style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>招待コード:</span>
+                      <span className="referral-code-value" style={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.9rem', color: '#fff' }}>{referralConfig['ニフティ'].referralCode}</span>
+                      <button
+                        className={`referral-copy-btn ${copiedId === 'nifty-site' ? 'copied' : ''}`}
+                        onClick={() => handleCopyCode('nifty-site', referralConfig['ニフティ'].referralCode)}
+                        style={{ marginLeft: 'auto', fontSize: '0.7rem', padding: '0.2rem 0.5rem', borderRadius: '4px', border: 'none', background: copiedId === 'nifty-site' ? 'var(--accent-green)' : 'rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer' }}
+                      >
+                        {copiedId === 'nifty-site' ? '✓ コピー完了' : '📋 コピー'}
+                      </button>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <div className="referral-note" style={{ margin: '0.5rem 0 0.75rem 0', fontSize: '0.7rem', color: 'var(--accent-green)' }}>{referralConfig['ニフティ'].note}</div>
+                    <a href={referralConfig['ニフティ'].referralUrl} target="_blank" rel="noopener noreferrer" className="action-btn" style={{ width: '100%', textAlign: 'center', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', display: 'block', boxSizing: 'border-box', textDecoration: 'none', padding: '0.5rem', borderRadius: '6px', color: '#fff', fontWeight: 700, fontSize: '0.85rem' }}>
+                      🎁 特典付きで登録する
+                    </a>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       <div className="container">
         {/* フィルターセクション */}
         <section className="filter-section">

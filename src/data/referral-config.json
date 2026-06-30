@@ -23,5 +23,20 @@
     "referralUrl": "https://mercari.com/signup/?code=YOUR_MERCARI_CODE",
     "referralCode": "YOUR_MERCARI_CODE",
     "note": "※新規登録時に紹介コードを入力すると500pt付与されます"
+  },
+  "モッピー": {
+    "referralUrl": "https://pc.moppy.jp/entry/invite.php?invite=HJYuA10e&openExternalBrowser=1",
+    "referralCode": "HJYuA10e",
+    "note": "※紹介URL経由の登録で最大2,000P進呈！"
+  },
+  "ハピタス": {
+    "referralUrl": "https://hapitas.jp/appinvite?i=25995031&route=pcText",
+    "referralCode": "WNZTKX",
+    "note": "※紹介URL経由の登録で最大2,000P進呈！"
+  },
+  "ニフティ": {
+    "referralUrl": "https://lifemedia.jp/entry/4466581/welcome",
+    "referralCode": "CF43D975",
+    "note": "※紹介URL経由の登録で最大1,000P ＆ ノジ活で価値1.5倍！"
   }
 }

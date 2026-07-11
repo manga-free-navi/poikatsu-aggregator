@@ -1,2 +1,2 @@
 :HL["/poikatsu-aggregator/_next/static/chunks/2zb7_pr2xy_ix.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"rVG33Fr7faQsrEHKZk7Ev"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"I0XPPsD2bS2U-HiGROpDO"}

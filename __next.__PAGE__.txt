@@ -1,9 +1,9 @@
 1:"$Sreact.fragment"
 2:I[47257,["/poikatsu-aggregator/_next/static/chunks/1z6x88ihszho0.js","/poikatsu-aggregator/_next/static/chunks/158myu8e_yme3.js"],"ClientPageRoot"]
-3:I[52683,["/poikatsu-aggregator/_next/static/chunks/1z6x88ihszho0.js","/poikatsu-aggregator/_next/static/chunks/158myu8e_yme3.js","/poikatsu-aggregator/_next/static/chunks/2ymm5th46i47o.js"],"default"]
+3:I[52683,["/poikatsu-aggregator/_next/static/chunks/1z6x88ihszho0.js","/poikatsu-aggregator/_next/static/chunks/158myu8e_yme3.js","/poikatsu-aggregator/_next/static/chunks/2qvquo1yl0e95.js"],"default"]
 6:I[97367,["/poikatsu-aggregator/_next/static/chunks/1z6x88ihszho0.js","/poikatsu-aggregator/_next/static/chunks/158myu8e_yme3.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/poikatsu-aggregator/_next/static/chunks/2ymm5th46i47o.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"aAF8OsfqkN3sjCYvq-2v6"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/poikatsu-aggregator/_next/static/chunks/2qvquo1yl0e95.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"B5BQBEFV1VYxy17dPnEFD"}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null
